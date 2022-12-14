@@ -1,0 +1,353 @@
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+class AccuWeather {
+    constructor() {
+        this.getGeoLocation = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(this.getCoords, this.getGeoErrors);
+            }
+            else {
+                this.fetchGeolocAkamai();
+            }
+        };
+        this.getCoords = (position) => {
+            const apiData = { type: 'geoposition', coords: position.coords.latitude + "," + position.coords.longitude };
+            this.listAllMobileWeatherLocation(apiData);
+        };
+    }
+    listAllWeatherLocation() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const weatherLocations = yield this.locationCallReq();
+            this.listDropDownData(weatherLocations);
+            this.renderWeatherData(weatherLocations);
+            setTimeout(() => {
+                document.querySelector('.weatherDisplayWeb .place-dropdown').classList.add('visible');
+            }, 1000);
+            this.eventListeners();
+        });
+    }
+    listAllMobileWeatherLocation(coords) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const locationInfo = yield this.getUserLocationResponse(coords);
+            coords.type === 'cities' ? this.renderAllMobileWeatherData(locationInfo[0]) : this.renderAllMobileWeatherData(locationInfo);
+        });
+    }
+    renderAllMobileWeatherData(locationInfo) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const landingPage = document.querySelector('.root-div-accuweather').getAttribute('data-landing-page');
+                if (document.querySelector('.weatherDisplayMob .wthr-place-blk')) {
+                    document.querySelector('.weatherDisplayMob .wthr-place-blk').innerHTML = '<span class="location-icon"><img src="/etc/designs/commonutils/clientlibs/img/location-icon.png"></span>' + locationInfo.EnglishName + '';
+                }
+                if (document.querySelector('#acculocation')) {
+                    const partnerCode = document.querySelector('.root-div-accuweather').getAttribute('data-api-partner');
+                    document.querySelector('#acculocation').setAttribute('href', landingPage + '/web-api/three-day-redirect?key=' + locationInfo.Key + '&lang=en-us&target=&partner=' + partnerCode);
+                }
+                const weatherData = yield this.fetchMobileWeatherData(locationInfo.Key);
+                this.renderMobileWeather(weatherData, locationInfo.Key);
+                if (document.querySelector('.wthr-bottom-txt')) {
+                    document.querySelector('.wthr-bottom-txt').innerHTML = this.updatedTime();
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        });
+    }
+    renderWeatherData(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = this.readStorage() !== null ? yield this.accuWeatherApicall(this.readStorage().locKey) : yield this.accuWeatherApicall(data[0].value);
+            if (this.readStorage() !== null) {
+                document.querySelector('.selected-place-web').innerHTML = this.readStorage().city;
+            }
+            else {
+                document.querySelector('.selected-place-web').innerHTML = data[0].text;
+            }
+            this.listTemperatureAndIcon(response);
+        });
+    }
+    fetchGeolocAkamai() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const weatherLocations = yield this.locationCallReqHeader();
+                const apiData = { type: 'cities', coords: weatherLocations.get('geo_loc') || 'IN,Thiruvananthapuram' };
+                this.listAllMobileWeatherLocation(apiData);
+                this.mobileEventListener();
+            }
+            catch (err) {
+            }
+        });
+    }
+    fetchGeoLocQuery(event) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (navigator.permissions) {
+                const permission = yield navigator.permissions.query({
+                    name: 'geolocation'
+                });
+                if (permission.state === 'granted') {
+                    this.getGeoLocation();
+                }
+                if (permission.state === 'prompt') {
+                    if (event === 'click') {
+                        this.getGeoLocation();
+                    }
+                    else if (event === 'load') {
+                        this.fetchGeolocAkamai();
+                    }
+                }
+                if (permission.state === 'denied') {
+                    if (event === 'click') {
+                        this.getGeoLocation();
+                    }
+                    else if (event === 'load') {
+                        this.fetchGeolocAkamai();
+                    }
+                }
+            }
+            else {
+                this.fetchGeolocAkamai();
+            }
+        });
+    }
+    mobileEventListener() {
+        try {
+            if (document.querySelector('.weatherDisplayMob .wthr-place-blk')) {
+                document.querySelector('.weatherDisplayMob .wthr-place-blk').addEventListener('click', (event) => {
+                    this.fetchGeoLocQuery('click');
+                });
+            }
+        }
+        catch (err) { }
+    }
+    renderMobileWeather(data, key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let listing = '';
+            const renderedData = yield this.weatherTimings(data, key);
+            renderedData.forEach((val, idx) => {
+                if (idx === 0) {
+                    listing += '<div class="wthr-detail-blk">';
+                    listing += '<div class="first-blk d-flex">';
+                    listing += '<div class="icon"><img class="" src="https://www.accuweather.com/images/weathericons/' + parseInt(val.imageIcon) + '.svg"></div>';
+                    listing += '<div class="temp-display-blk">' + val.temperature + '°<span class="temp-cl-grey">C</span></div>';
+                    listing += '</div>';
+                    listing += '<div class="wthr-info-txt t-align-R">' + val.weatherInfo + '</div>';
+                    listing += '</div>';
+                }
+                else {
+                    if (idx === 1) {
+                        listing += '<div class="wthr-comingDays-blk">';
+                        listing += '<ul class="wthr-Ul" >';
+                    }
+                    if (idx >= 1 && idx <= 3) {
+                        listing += '<li class="wthr-List">';
+                        listing += '<div class="wthr-Day-Name"> ' + val.dayName + ' </div>';
+                        listing += '<div class="wthr-icon-blk"> <img src="https://www.accuweather.com/images/weathericons/' + parseInt(val.imageIcon) + '.svg"> </div>';
+                        listing += ' <div class="wthr-temp-blk"> ' + val.maxTemp + '°C<span class="clr-grey"> /' + val.minTemp + '°C</span></div>';
+                        listing += ' </li>';
+                    }
+                    if (idx === 3) {
+                        listing += '</ul>';
+                        listing += '</div>';
+                    }
+                }
+            });
+            if (document.querySelector('.weatherDisplayMob .middle')) {
+                document.querySelector('.weatherDisplayMob .middle').innerHTML = listing;
+            }
+        });
+    }
+    updatedTime() {
+        const date = new Date();
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        let tempMinute;
+        let tempHour;
+        const time = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        tempMinute = Number(minutes) < 10 ? '0' + minutes : minutes;
+        tempHour = Number(hours) < 10 ? '0' + hours : hours;
+        return 'Updated at ' + tempHour + ':' + tempMinute + ' ' + time;
+    }
+    weatherTimings(data, key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const dataList = [];
+            const currentTime = yield this.accuWeatherApicall(key);
+            data.DailyForecasts.forEach((val, idx) => {
+                if (idx === 0) {
+                    const lineVal = parseFloat(currentTime[idx].Temperature.Metric.Value) - parseInt(currentTime[idx].Temperature.Metric.Value);
+                    const temp = lineVal <= 0.5 ? Math.floor(currentTime[idx].Temperature.Metric.Value) : Math.ceil(parseFloat(currentTime[idx].Temperature.Metric.Value));
+                    const renderObj = { imageIcon: currentTime[idx].WeatherIcon, temperature: temp, weatherInfo: currentTime[idx].WeatherText, dayName: 'Today', maxTemp: temp, minTemp: temp };
+                    dataList[idx] = renderObj;
+                }
+                if (idx === 1) {
+                    const renderObj = { imageIcon: val['Day'].Icon, temperature: this.convertfarenToCel(val['Temperature'].Maximum.Value), weatherInfo: val['Day'].IconPhrase, dayName: 'Tomorrow', maxTemp: this.convertfarenToCel(val['Temperature'].Maximum.Value), minTemp: this.convertfarenToCel(val['Temperature'].Minimum.Value) };
+                    dataList[idx] = renderObj;
+                }
+                if (idx >= 2) {
+                    const day_Name = this.returnDayName(val.Date);
+                    const renderObj = { imageIcon: val['Day'].Icon, temperature: this.convertfarenToCel(val['Temperature'].Maximum.Value), weatherInfo: val['Day'].IconPhrase, dayName: day_Name, maxTemp: this.convertfarenToCel(val['Temperature'].Maximum.Value), minTemp: this.convertfarenToCel(val['Temperature'].Minimum.Value) };
+                    dataList[idx] = renderObj;
+                }
+            });
+            return dataList;
+        });
+    }
+    convertfarenToCel(faren) {
+        return Math.round(((parseFloat(faren) - 32) * 5) / 9);
+    }
+    checkCurrentTiming(rise, set) {
+        const riseTime = new Date(rise).getMilliseconds();
+        const setTime = new Date(set).getMilliseconds();
+        const now = Date.now();
+        if (now > riseTime && now > setTime) {
+            return "Day";
+        }
+        else {
+            return 'Night';
+        }
+    }
+    getGeoErrors(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                alert("Location is not enabled . Please enable it to continue the service");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                alert("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("An unknown error occurred.");
+                break;
+        }
+    }
+    returnDayName(date) {
+        const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const day = new Date(date);
+        return weekDays[day.getDay()];
+    }
+    getUserLocationResponse(api) {
+        let locationKey = '';
+        let { host, key, partnerCode } = this.fetchHostAndKey();
+        let apiKey = '';
+        if (api.type === 'cities') {
+            apiKey = 'https://' + host + '/locations/v1/cities/search.json?q=' + api.coords + '&apikey=' + key + '&language=en-us&details=true' + '&partner=' + partnerCode;
+        }
+        else if (api.type === 'geoposition') {
+            apiKey = 'https://' + host + '/locations/v1/cities/geoposition/search.json?q=' + api.coords + '&apikey=' + key + '&details=true' + '&partner=' + partnerCode;
+        }
+        return fetch(apiKey).then(response => response.json());
+    }
+    fetchMobileWeatherData(location) {
+        let { host, key, partnerCode } = this.fetchHostAndKey();
+        let locationAjaxPath = 'https://' + host + '/forecasts/v1/daily/5day/' + location + '?apikey=' + key + '&details=true' + '&partner=' + partnerCode;
+        return fetch(locationAjaxPath).then(response => response.json());
+    }
+    fetchHostAndKey() {
+        let hostElement = document.querySelector('.root-div-accuweather');
+        let host = hostElement.getAttribute('data-api-host');
+        let key = hostElement.getAttribute('data-api-key');
+        let partnerCode = hostElement.getAttribute('data-api-partner');
+        return { host, key, partnerCode };
+    }
+    listTemperatureAndIcon(response) {
+        const lineVal = parseFloat(response[0].Temperature.Metric.Value) - parseInt(response[0].Temperature.Metric.Value);
+        const temp = lineVal <= 0.5 ? Math.floor(response[0].Temperature.Metric.Value) : Math.ceil(parseFloat(response[0].Temperature.Metric.Value));
+        //const icon = parseInt(response[0].WeatherIcon) < 10 ? '0' + response[0].WeatherIcon : response[0].WeatherIcon;
+        document.querySelector('.weatherDisplayWeb .icon img').src = 'https://www.accuweather.com/images/weathericons/' + parseInt(response[0].WeatherIcon) + '.svg'; // 'https://developer.accuweather.com/sites/default/files/' + icon + '-s.png';
+        document.querySelector('.weatherDisplayWeb .temp-display-blk').innerHTML = temp + '°' + '<span class="temp-cl-grey">C</span>';
+    }
+    listDropDownData(data) {
+        let listing = '';
+        const locationIndex = data;
+        locationIndex.forEach(function (data, idx) {
+            listing += '<li class="place-list" data-region="IndiaInternational"  data-city="' + data.text + '" data-value="' + data.value + '" >' + data.text + '</li>';
+        });
+        document.querySelector('.list-web').innerHTML = listing;
+    }
+    readStorage() {
+        if (localStorage.getItem('weatherData')) {
+            return JSON.parse(localStorage.getItem('weatherData'));
+        }
+        return null;
+    }
+    saveTostorage(location) {
+        localStorage.setItem('weatherData', JSON.stringify(location));
+    }
+    eventListeners() {
+        document.addEventListener('click', (event) => {
+            const target = document.querySelector('.place-show-blk');
+            if (target.style.display === 'block') {
+                target.style.display = 'none';
+            }
+            event.stopPropagation();
+        });
+        document.querySelectorAll('.place-list').forEach(item => {
+            item.addEventListener('click', event => {
+                this.dropDownUtility(event);
+            });
+        });
+        document.querySelector('.wthr-click').addEventListener('click', (event) => {
+            const target = document.querySelector('.place-show-blk');
+            if (target.style.display === 'block') {
+                target.style.display = 'none';
+            }
+            else {
+                target.style.display = 'block';
+            }
+            event.stopPropagation();
+        });
+    }
+    dropDownUtility(event) {
+        const landingPage = document.querySelector('.root-div-accuweather').getAttribute('data-landing-page');
+        const partnerCode = document.querySelector('.root-div-accuweather').getAttribute('data-api-partner');
+        const city = event.target.getAttribute('data-city');
+        const key = event.target.getAttribute('data-value');
+        window.open(landingPage + '/web-api/three-day-redirect?key=' + key + '&lang=en-us&target=&partner=' + partnerCode, '_blank');
+        document.querySelector('.place-show-blk').style.display = 'none';
+        document.querySelector('.selected-place-web').innerHTML = city;
+        this.saveTostorage({ city: city, locKey: key });
+        this.renderWeatherData({ text: city, value: key });
+        event.stopPropagation();
+    }
+    accuWeatherApicall(location) {
+        let hostElement = document.querySelector('.root-div-accuweather');
+        let host = hostElement.getAttribute('data-api-host');
+        let key = hostElement.getAttribute('data-api-key');
+        let partnerCode = hostElement.getAttribute('data-api-partner');
+        return fetch('https://' + host + '/currentconditions/v1/' + location + '?apikey=' + key + '&details=true' + '&partner=' + partnerCode).then(response => response.json());
+    }
+    locationCallReq() {
+        let locationAjaxPath = '/etc/acs-commons/lists/public/accuweather-locations-list/_jcr_content.list.json';
+        return fetch(locationAjaxPath).then(response => response.json());
+    }
+    locationCallReqHeader() {
+        let locationAjaxPath = '/etc/acs-commons/lists/public/accuweather-locations-list/_jcr_content.list.json';
+        return fetch(locationAjaxPath).then(response => response.headers);
+    }
+}
+let accuInstance = new AccuWeather();
+window.addEventListener("DOMContentLoaded", (event) => {
+    if (window.screen.width < 750) {
+        if (navigator.permissions) {
+            accuInstance.fetchGeoLocQuery('load');
+        }
+        else {
+            accuInstance.fetchGeolocAkamai();
+        }
+    }
+    else {
+        accuInstance.listAllWeatherLocation();
+    }
+});
+},{}]},{},[1])

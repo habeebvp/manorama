@@ -1,0 +1,18 @@
+$(document).ready(function() {
+    $('.ml-login-icon-blk, .ml-login-icon-blk-mobile').click(function(e) {
+        e.preventDefault();
+        if ($(this).hasClass('user-signed-in') && !$(this).hasClass('user-not-signed')) {
+            $('.login-dropdown-blk').slideToggle();
+            return false;
+        }
+    });
+
+    $(document).click(function() {
+        $('.login-dropdown-blk').slideUp(350);
+    });
+
+    $('.ml-login-icon-blk, .ml-login-icon-blk-mobile, .login-dropdown-blk').click(function(event) {
+        event.stopPropagation();
+    });
+
+});

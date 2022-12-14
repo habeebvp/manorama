@@ -1,0 +1,222 @@
+.header-icon-text,
+.prmium-new-login {
+    color: #FFFFFF;
+    padding-left: 5px;
+}
+
+.my-accountdroparrow {
+    padding-left: 4px;
+}
+
+.header-top-icon {
+    margin-top: -2px;
+}
+
+.header-top-icon,
+.header-icon-text,
+.mm-myaccount-header .ml-login-icon-only,
+.mm-myaccount-header .prmium-new-login {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.afterlogin-drop,
+.login-dropdown-blk {
+    position: absolute;
+    top: 100%;
+    margin-top: 5px;
+    right: 8px;
+    background: #fff;
+    border: 1px solid #eee;
+    z-index: 1000;
+    width: 250px;
+    text-align: left;
+    display: none;
+    -moz-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.afterlogin-drop::after,
+.login-dropdown-blk:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 11px solid #eee;
+    position: absolute;
+    right: 11px;
+    top: -11px;
+    z-index: 0;
+}
+
+.afterlogin-drop::before,
+.login-dropdown-blk:before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #F7F8F9;
+    position: absolute;
+    right: 13px;
+    top: -10px;
+    z-index: 1;
+}
+
+.logindusername {
+    padding: 15px;
+    background: #F7F8F9;
+    -moz-border-radius: 10px 10px 0 0;
+    -webkit-border-radius: 10px 10px 0 0;
+    border-radius: 10px 10px 0 0;
+}
+
+.logindusername a {
+    text-decoration: none;
+}
+
+.logindusername .text-blk {
+    color: #666;
+    font-size: 0.8125rem;
+    margin: 0 0 5px;
+}
+
+.logindusername .profile_name_txt {
+    display: block;
+    color: #333;
+    margin: 0;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.myaccountdrop-ul {
+    max-height: 280px;
+    overflow: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.my-accountdrop-li {
+    display: block;
+    border-bottom: 1px solid #eee;
+}
+
+.my-accountdrop-li a {
+    cursor: pointer;
+    display: block;
+    padding: 15px;
+    font-size: 0.875rem;
+    color: #333;
+    text-decoration: none;
+}
+
+.mm-bread-crump-wrp {
+    padding: 14px 0;
+}
+
+.breadcrumbs-ul {
+    overflow: auto;
+    white-space: nowrap;
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+    list-style: none;
+    margin: 0 !important;
+    padding: 0;
+}
+
+.breadcrumbs-li {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.breadcrumbs-li::before {
+    display: inline-block;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    color: #fff;
+    content: "/";
+    opacity: .7;
+}
+
+.breadcrumbs-li:first-child::before {
+    display: none;
+}
+
+.breadcrumbs-li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.breadcrumbs-li:last-child a {
+    opacity: .5;
+}
+
+@media only screen and (max-width:991px) {
+    .prmium-new-login {
+        width: 12px;
+        overflow: hidden;
+        text-indent: -92px;
+    }
+}
+.prm-new-block-right .prm-my-account li.my-accountdrop-li:last-child {
+    border-bottom: 0;
+}
+
+.prm-new-block-right .prm-my-account .user-signed-in .prmium-new-login {
+    display: inline-block;
+}
+
+.prm-new-block-right .prm-my-account .user-signed-in .prmium-new-login.signed-in-text {
+    display: inline-block;
+}
+
+.prm-new-block-right .prm-my-account .user-signed-in .prmium-new-login.signed-out-text {
+    display: none;
+}
+
+.prm-new-block-right .prm-my-account .user-not-signed .prmium-new-login.signed-out-text {
+    display: inline-block;
+}
+
+.prm-new-block-right .prm-my-account .user-not-signed .prmium-new-login.signed-in-text {
+    display: none;
+}
+
+.prm-new-block-right .prm-my-account li.my-accountdrop-li {
+    display: block;
+}
+
+.prm-new-block-right .premlogin-block-in {
+    cursor: pointer;
+}
+
+.mm-myaccount-header .ml-login-icon-only .fas {
+    color: #fff;
+}
+
+.login-dropdown-blk ul li a:hover {
+    background-color: #f3f3f3;
+    transition: background-color .3s;
+}
+
+@media only screen and (max-width:991px) {
+    .mm-myaccount-header .prm-new-block-right .login-dropdown-blk {
+        right: 2px;
+    }
+}
+.login-dropdown-blk{
+	z-index: 999999999 !important;
+}
+@media only screen and (max-width:991px){
+	.prm-new-block-right .prm-my-account .user-not-signed .prmium-new-login.signed-out-text {
+		display: none !important;
+	}
+}

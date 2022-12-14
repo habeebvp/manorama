@@ -1,0 +1,353 @@
+* {
+    margin: 0px;
+}
+.heading {
+    background-color: black;
+    height: 40px;
+    color: white;
+}
+.heading > ul {
+    list-style-type: none;
+    padding-top: 10px;
+}
+.heading > ul > li {
+    display: inline;
+    margin-left: 20px;
+}
+.trending {
+    color: aqua;
+}
+.login
+{
+    float: right;
+    margin-right: 100px;
+    color:white;
+    margin-top: -48px;
+    font-weight: bold;
+}
+.banner
+{
+    
+    margin-left: 180px;
+    margin-top: 20px;
+}
+.list
+{
+    margin: 0px;
+    display: inline;
+    float: right;
+    margin-right: 50px;
+}
+.list > ul > li
+{
+    display: inline;
+    margin-left: 10px;
+    font-size: small;
+    background-color: lightgrey
+}
+.facebook
+{
+    color: blue;
+}
+.twiter
+{
+    color:lightseagreen;
+}
+.instagram
+{
+    color:#f75648
+}
+.date
+{
+    text-decoration-line: line-through;
+    margin-left: 40px;
+    color: lightgray;
+}
+.section
+{
+    border: solid 1PX lightblue;
+    width: 100PX;
+    border-radius: 5PX;
+    margin-left: 43px;
+    margin-top: 50px;
+}
+.logo
+{
+    margin-left: 30px;
+    width: 20px;
+}
+.logo > img 
+{
+    height: 60px;
+    width: 600px;
+    margin-left: 350px;
+    margin-top: -100px;
+}
+hr
+{
+    border-width: 2px;
+    border-color: black;
+    margin-left: 42px;
+    margin-right: 50px;
+}
+.menu > ul > li
+{
+    
+
+    margin-left: 10px;
+    display: inline;
+    margin-left: 19px; 
+    font-size: medium;
+    border: solid 1PX lightgrey;
+    margin-top: 10px;
+    margin: right 60px; 
+
+
+}
+.home
+{
+  color: darkblue;  
+}
+.banner2
+{
+    margin-right: 50px;
+    margin-left: 175px;
+    margin-top: 10px;
+    width: 20px;
+}
+.news1 
+{
+    margin-left: 40px;
+    width: 400px;
+}
+.news1 > h3 
+{
+    color: red;
+    font-weight: bold;
+}
+.news1 > h2 
+{
+    font-size: 16px;
+}
+.news1 > p 
+{
+    font-size: 15px;
+}
+.news2
+{
+    
+    margin-right: 50px;
+
+}
+.news2 > h4
+{
+    font-size: 16px;
+    margin-left: 45px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+.news2 > p
+{
+    
+    margin-left: 40px;
+    width: 250px;
+font-size: 10px;
+}
+.news2 > img
+{
+    width: 200px;
+    margin-left: 45px;
+
+}
+.news2 > h3 
+{
+    margin-left: 275px;
+    width: 250px;
+    font-size: 8px;
+    margin-top: -43px;
+    
+}
+.news3 
+{ 
+margin-left: 510px;
+margin-top: -455px;    
+width: 400px;
+}
+.news3 > h2
+{
+    margin-left: 100px;
+    font-size: small;
+    margin-top: -50px;
+
+}
+.news4 
+{
+    width: 400px;
+    margin-left: 510px;
+}
+.news4 > img
+{
+    margin-top: 10px;
+    width: 85px;
+}
+.news4 > h2
+{
+    margin-left: 100px;
+    font-size: small;
+    margin-top: -50px;
+}
+.news5
+{
+    width: 400px;
+    margin-left: 510px;
+}
+.news5 > img 
+{
+    margin-top:15px;
+    width: 85px;
+}
+.news5 > h2
+{
+    margin-left: 100px;
+    font-size: small;
+    margin-top: -50px;
+} 
+.news6
+{
+    width: 400px;
+    margin-left: 510px;
+}
+.news6 > img 
+
+{
+    margin-top: 10px;
+    width: 85px;
+
+}
+.news6 > h2 
+{
+    margin-left: 100px;
+    font-size: small;
+    margin-top: -50px;
+}
+.news7
+{
+    width: 400px;
+    margin-left: 510px;
+}
+.news7 > img 
+
+{
+    margin-top: 10px;
+    width: 85px;
+
+}
+.news7 > h2 
+{
+    margin-left: 100px;
+    font-size: small;
+    margin-top: -50px;
+}
+.news8
+{
+    width: 400px;
+    margin-left: 510px;
+}
+.news8 > img 
+
+{
+    margin-top: 10px;
+    width: 85px;
+
+}
+.news8 > h2 
+{
+    margin-left: 100px;
+    font-size: small;
+    margin-top: -50px;
+}
+.news9
+{
+    width: 400px;
+    margin-left: 510px;
+}
+.news9 > img 
+
+{
+    margin-top: 10px;
+    width: 85px;
+
+}
+.news9 > h2 
+{
+    margin-left: 100px;
+    font-size: small;
+    margin-top: -50px;
+}
+.news10
+{
+    margin-left: 950px;
+    margin-top: -450px;
+}
+.trending
+{
+    color: red;
+    margin-left: 950px;
+    margin-top: -1px;
+    font-size: 10px;
+}
+
+.news11
+{
+    width: 400px;
+    margin-left: 950px;
+}
+.news11 > img 
+
+{
+    margin-top: 10px;
+    width: 85px;
+
+}
+.news11 > h2 
+{
+    margin-left: 100px;
+    font-size: small;
+    margin-top: -50px;
+}
+.news12
+{
+    width: 400px;
+    margin-left: 950px;
+}
+.news12 > img 
+
+{
+    margin-top: 10px;
+    width: 85px;
+
+}
+.news12 > h2 
+{
+    margin-left: 100px;
+    font-size: small;
+    margin-top: -50px;
+}
+.news13
+{
+    width: 400px;
+    margin-left: 950px;
+}
+.news13 > img 
+
+{
+    margin-top: 10px;
+    width: 85px;
+
+}
+.news13 > h2 
+{
+    margin-left: 100px;
+    font-size: small;
+    margin-top: -50px;
+}
